@@ -2,12 +2,13 @@ package com.eisen.foodapp.module.user.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record AuthenticationDTO (
         @NotNull
-        @Min(5)
+        @Size(min = 5, message = "{validation.name.size.too_short}")
         String login,
         @NotNull
-        @Min(8)
+        @Size(min = 8, message = "{validation.name.size.too_short}")
         String password
 ) {}
