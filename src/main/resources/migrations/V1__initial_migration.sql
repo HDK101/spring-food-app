@@ -1,1 +1,0 @@
-CREATE TABLE users(varchar(255) name)
