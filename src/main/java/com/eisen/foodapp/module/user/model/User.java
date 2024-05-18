@@ -12,11 +12,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-@JsonIgnoreProperties({ "password", "rawPassword", "authorities" })
+@JsonIgnoreProperties({ "password", "rawPassword", "authorities", "roles" })
 @Entity(name = "users")
 public class User implements UserDetails {
     @Id()
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_generator")
+    @SequenceGenerator(name = "users_generator", sequenceName = "users_seq", allocationSize = 1)
     private Long id;
 
     @Column
@@ -93,6 +94,12 @@ public class User implements UserDetails {
         user.setLogin(createUserDTO.login());
         user.setRawPassword(createUserDTO.password());
         return user;
+    }
+
+    public void put(CreateUserDTO createUserDTO) {
+        this.setName(createUserDTO.name());
+        this.setLogin(createUserDTO.login());
+        this.setRawPassword(createUserDTO.password());
     }
 
     @Override
