@@ -1,0 +1,8 @@
+[flyway]
+locations = ["filesystem:src/main/resources/migrations"]
+
+[environments.default]
+locations = ["filesystem:src/main/resources/migrations"]
+url = "jdbc:postgresql://localhost:5432/foodapp"
+user = "postgres"
+password = "password"
