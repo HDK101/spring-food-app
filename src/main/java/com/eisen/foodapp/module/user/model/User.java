@@ -84,6 +84,10 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public void clearRoles() {
+        this.roles = new HashSet<>();
+    }
+
     public void addRole(Role role) {
         this.roles.add(role);
     }

@@ -2,6 +2,8 @@ package com.eisen.foodapp.module.user.controller;
 
 import com.eisen.foodapp.module.user.dto.CreateUserDTO;
 import com.eisen.foodapp.module.user.dto.RegisterDTO;
+import com.eisen.foodapp.module.user.dto.SetRolesDTO;
+import com.eisen.foodapp.module.user.model.Role;
 import com.eisen.foodapp.module.user.model.User;
 import com.eisen.foodapp.module.user.repository.RoleRepository;
 import com.eisen.foodapp.module.user.repository.UserRepository;
@@ -15,7 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("users")
@@ -51,10 +56,24 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> delete(@RequestParam Long id) {
+    public ResponseEntity<User> delete(@RequestParam(name = "id") Long id) {
         if (!userRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         userRepository.deleteById(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/{id}/roles")
+    public ResponseEntity<User> associateRoles(@RequestParam(name = "id") Long id, @RequestBody SetRolesDTO data) {
+        var user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        var roles = roleRepository.findAllById(data.roleIds());
+
+        user.clearRoles();
+        roles.forEach(user::addRole);
+
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
