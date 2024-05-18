@@ -1,20 +1,18 @@
 package com.eisen.foodapp.module.user.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.eisen.foodapp.module.user.dto.CreateUserDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+@JsonIgnoreProperties({ "password", "rawPassword", "authorities" })
 @Entity(name = "users")
 public class User implements UserDetails {
     @Id()
@@ -27,17 +25,8 @@ public class User implements UserDetails {
     @Column
     private String login;
 
-    @JsonIgnore
     @Column(name = "password_hash")
     private String password;
-
-    public String getRawPassword() {
-        return rawPassword;
-    }
-
-    public void setRawPassword(String rawPassword) {
-        this.rawPassword = rawPassword;
-    }
 
     @Transient
     private String rawPassword;
@@ -49,6 +38,14 @@ public class User implements UserDetails {
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
     private Set<Role> roles = new HashSet<>();
+
+    public String getRawPassword() {
+        return rawPassword;
+    }
+
+    public void setRawPassword(String rawPassword) {
+        this.rawPassword = rawPassword;
+    }
 
     public void setPassword(String password) {
         this.password = password;
@@ -66,8 +63,16 @@ public class User implements UserDetails {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getLogin() {
         return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public Set<Role> getRoles() {
@@ -82,11 +87,20 @@ public class User implements UserDetails {
         this.roles.add(role);
     }
 
+    public static User from(CreateUserDTO createUserDTO) {
+        User user = new User();
+        user.setName(createUserDTO.name());
+        user.setLogin(createUserDTO.login());
+        user.setRawPassword(createUserDTO.password());
+        return user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream().map(Role::getAsAuthority).toList();
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -116,17 +130,9 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @PrePersist
     public void hashPassword() {
         var bcryptEncoder = new BCryptPasswordEncoder();
-        this.password = bcryptEncoder.encode(this.password);
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
+        this.password = bcryptEncoder.encode(this.rawPassword);
     }
 }

@@ -2,6 +2,7 @@ package com.eisen.foodapp.module.user.controller;
 
 import com.eisen.foodapp.common.service.TokenService;
 import com.eisen.foodapp.module.user.dto.AuthenticationDTO;
+import com.eisen.foodapp.module.user.dto.CreateUserDTO;
 import com.eisen.foodapp.module.user.dto.LoginResponseDTO;
 import com.eisen.foodapp.module.user.model.User;
 import jakarta.validation.Valid;
@@ -24,7 +25,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody AuthenticationDTO data) {
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody CreateUserDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
