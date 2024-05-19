@@ -28,6 +28,13 @@ public class UserController {
         return ResponseEntity.ok(userRepository.findAll(pageable));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<User> show(@PathVariable Long id) {
+        User user = userRepository.findById(id).orElseThrow();
+
+        return ResponseEntity.ok(user);
+    }
+
     @PostMapping
     public ResponseEntity<User> store(@Valid @RequestBody CreateUserDTO data) {
         User user = User.from(data);
