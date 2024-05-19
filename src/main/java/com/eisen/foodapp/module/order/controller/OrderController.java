@@ -37,7 +37,6 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Order> store(@RequestBody CreateOrderDTO data) {
-        System.out.println(data.foodIds());
         var foods = foodRepository.findAllById(data.foodIds());
         var order = new Order();
 

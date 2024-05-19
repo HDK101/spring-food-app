@@ -31,8 +31,11 @@ public class DefaultSecurity {
                         authorize
                                 .requestMatchers(HttpMethod.POST, "/auth").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/foods").hasAnyRole("CLIENT")
-                                .requestMatchers(HttpMethod.GET, "/users/hello").hasRole("CLIENT")
+                                .requestMatchers("/foods").hasRole("ADMIN")
+                                .requestMatchers("/users").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/orders/client").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/orders").hasRole("CLIENT")
                                 .anyRequest().permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
