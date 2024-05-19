@@ -28,7 +28,7 @@ public class UserController {
         return ResponseEntity.ok(userRepository.findAll(pageable));
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> show(@PathVariable Long id) {
         User user = userRepository.findById(id).orElseThrow();
 
