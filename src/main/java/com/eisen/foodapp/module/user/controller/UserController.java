@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/roles")
-    public ResponseEntity<User> associateRoles(@RequestParam(name = "id") Long id, @PathVariable SetRolesDTO data) {
+    public ResponseEntity<User> associateRoles(@PathVariable Long id, @RequestBody SetRolesDTO data) {
         var user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         var roles = roleRepository.findAllById(data.roleIds());

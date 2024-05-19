@@ -21,8 +21,16 @@ public class Role {
     @Column
     private String role;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
+
+    public Role() {
+    }
+
+    public Role(String name, String role) {
+        this.name = name;
+        this.role = role;
+    }
 
     public Long getId() {
         return id;
