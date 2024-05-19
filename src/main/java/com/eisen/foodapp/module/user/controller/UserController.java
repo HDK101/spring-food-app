@@ -23,12 +23,12 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<Page<User>> index(Pageable pageable) {
         return ResponseEntity.ok(userRepository.findAll(pageable));
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<User> store(@Valid @RequestBody CreateUserDTO data) {
         User user = User.from(data);
 
