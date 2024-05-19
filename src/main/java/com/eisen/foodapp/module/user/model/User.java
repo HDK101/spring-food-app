@@ -1,6 +1,7 @@
 package com.eisen.foodapp.module.user.model;
 
 
+import com.eisen.foodapp.module.order.model.Order;
 import com.eisen.foodapp.module.user.dto.CreateUserDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @JsonIgnoreProperties({ "password", "rawPassword", "authorities", "roles" })
@@ -39,6 +41,9 @@ public class User implements UserDetails {
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
     public String getRawPassword() {
         return rawPassword;
