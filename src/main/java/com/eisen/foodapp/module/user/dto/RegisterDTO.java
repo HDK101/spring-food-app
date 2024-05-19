@@ -8,7 +8,7 @@ public record RegisterDTO(
         @NotNull
         String name,
         @NotNull
-        @Size(min = 8, message = "{validation.name.size.too_short}")
+        @Size(min = 5, message = "{validation.name.size.too_short}")
         String login,
         @NotNull
         @Size(min = 8, message = "{validation.name.size.too_short}")

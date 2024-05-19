@@ -7,6 +7,8 @@ import com.eisen.foodapp.module.user.dto.LoginResponseDTO;
 import com.eisen.foodapp.module.user.model.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +33,6 @@ public class AuthenticationController {
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponseDTO(token));
     }
 }

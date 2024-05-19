@@ -6,6 +6,7 @@ import com.eisen.foodapp.module.user.repository.RoleRepository;
 import com.eisen.foodapp.module.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,12 +35,12 @@ public class RegisterController {
         var user = new User();
         user.setName(data.name());
         user.setLogin(data.login());
-        user.setPassword(data.password());
+        user.setRawPassword(data.password());
 
         user.addRole(role);
 
         userRepository.save(user);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
