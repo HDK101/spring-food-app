@@ -34,7 +34,7 @@ public class DefaultSecurity {
                                 .requestMatchers("/foods").hasRole("ADMIN")
                                 .requestMatchers("/users").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/orders/client").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/orders/client").hasRole("CLIENT")
                                 .requestMatchers(HttpMethod.POST, "/orders").hasRole("CLIENT")
                                 .anyRequest().permitAll()
                 )
