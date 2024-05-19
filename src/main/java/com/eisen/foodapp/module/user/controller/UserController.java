@@ -1,9 +1,7 @@
 package com.eisen.foodapp.module.user.controller;
 
 import com.eisen.foodapp.module.user.dto.CreateUserDTO;
-import com.eisen.foodapp.module.user.dto.RegisterDTO;
 import com.eisen.foodapp.module.user.dto.SetRolesDTO;
-import com.eisen.foodapp.module.user.model.Role;
 import com.eisen.foodapp.module.user.model.User;
 import com.eisen.foodapp.module.user.repository.RoleRepository;
 import com.eisen.foodapp.module.user.repository.UserRepository;
@@ -14,13 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("users")
@@ -47,7 +39,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@Valid @RequestBody CreateUserDTO data, @RequestParam Long id) {
+    public ResponseEntity<User> update(@Valid @RequestBody CreateUserDTO data, @PathVariable Long id) {
         User user = userRepository.findById(id).orElseThrow();
         user.put(data);
 
@@ -56,7 +48,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> delete(@RequestParam(name = "id") Long id) {
+    public ResponseEntity<User> delete(@PathVariable(name = "id") Long id) {
         if (!userRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         userRepository.deleteById(id);
 
@@ -64,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/roles")
-    public ResponseEntity<User> associateRoles(@RequestParam(name = "id") Long id, @RequestBody SetRolesDTO data) {
+    public ResponseEntity<User> associateRoles(@RequestParam(name = "id") Long id, @PathVariable SetRolesDTO data) {
         var user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         var roles = roleRepository.findAllById(data.roleIds());
