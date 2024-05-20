@@ -45,7 +45,7 @@ public class Role {
     }
 
     public GrantedAuthority getAsAuthority() {
-        return new SimpleGrantedAuthority(this.role.toUpperCase());
+        return new SimpleGrantedAuthority("ROLE_" + this.role.toUpperCase());
     }
 
     public void setRole(String role) {
