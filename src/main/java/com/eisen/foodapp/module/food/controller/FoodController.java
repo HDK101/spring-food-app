@@ -35,6 +35,7 @@ public class FoodController {
     }
 
     @Operation(security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ResponseEntity<Food> store(@Valid @RequestBody CreateFoodDTO data) {
         Food food = Food.from(data);
@@ -44,6 +45,7 @@ public class FoodController {
     }
 
     @Operation(security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping("/{id}")
     public ResponseEntity<Food> update(@PathVariable Long id, @Valid @RequestBody CreateFoodDTO data) {
         Food food = foodRepository.findById(id).orElseThrow();
@@ -54,6 +56,7 @@ public class FoodController {
     }
 
     @Operation(security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
     public ResponseEntity delete(@PathVariable Long id) {
         if (!foodRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Food not found");
