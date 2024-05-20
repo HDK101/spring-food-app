@@ -3,6 +3,8 @@ package com.eisen.foodapp.module.food.controller;
 import com.eisen.foodapp.module.food.dto.CreateFoodDTO;
 import com.eisen.foodapp.module.food.model.Food;
 import com.eisen.foodapp.module.food.repository.FoodRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,11 +20,13 @@ public class FoodController {
     @Autowired
     private FoodRepository foodRepository;
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<Page<Food>> index(Pageable pageable) {
         return ResponseEntity.ok(this.foodRepository.findAll(pageable));
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{id}")
     public ResponseEntity<Food> show(@PathVariable Long id) {
         Food food = foodRepository.findById(id).orElseThrow();
@@ -30,6 +34,7 @@ public class FoodController {
         return ResponseEntity.ok(food);
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
     public ResponseEntity<Food> store(@Valid @RequestBody CreateFoodDTO data) {
         Food food = Food.from(data);
@@ -38,6 +43,7 @@ public class FoodController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFood);
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/{id}")
     public ResponseEntity<Food> update(@PathVariable Long id, @Valid @RequestBody CreateFoodDTO data) {
         Food food = foodRepository.findById(id).orElseThrow();
@@ -47,6 +53,7 @@ public class FoodController {
         return ResponseEntity.ok(savedFood);
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping
     public ResponseEntity delete(@PathVariable Long id) {
         if (!foodRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Food not found");

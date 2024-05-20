@@ -31,6 +31,7 @@ public class UserController {
         return ResponseEntity.ok(userRepository.findAll(pageable));
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{id}")
     public ResponseEntity<User> show(@PathVariable Long id) {
         User user = userRepository.findById(id).orElseThrow();
@@ -38,6 +39,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
     public ResponseEntity<User> store(@Valid @RequestBody CreateUserDTO data) {
         User user = User.from(data);
@@ -48,6 +50,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@Valid @RequestBody CreateUserDTO data, @PathVariable Long id) {
         User user = userRepository.findById(id).orElseThrow();
@@ -57,6 +60,7 @@ public class UserController {
         return ResponseEntity.ok(savedUser);
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/{id}")
     public ResponseEntity<User> delete(@PathVariable(name = "id") Long id) {
         if (!userRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
@@ -65,6 +69,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/{id}/roles")
     public ResponseEntity<User> associateRoles(@PathVariable Long id, @RequestBody SetRolesDTO data) {
         var user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
