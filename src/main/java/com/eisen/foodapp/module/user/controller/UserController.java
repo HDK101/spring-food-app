@@ -5,6 +5,8 @@ import com.eisen.foodapp.module.user.dto.SetRolesDTO;
 import com.eisen.foodapp.module.user.model.User;
 import com.eisen.foodapp.module.user.repository.RoleRepository;
 import com.eisen.foodapp.module.user.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<Page<User>> index(Pageable pageable) {
         return ResponseEntity.ok(userRepository.findAll(pageable));
