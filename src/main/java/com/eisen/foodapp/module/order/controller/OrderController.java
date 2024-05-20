@@ -36,6 +36,8 @@ public class OrderController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+
     public ResponseEntity<Order> store(@RequestBody CreateOrderDTO data) {
         var foods = foodRepository.findAllById(data.foodIds());
         var order = new Order();
